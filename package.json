@@ -1,0 +1,19 @@
+{
+  "name": "michael-armand",
+  "version": "1.0.0",
+  "description": "Node and stuff",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fac-14/michael-armand.git"
+  },
+  "author": "Armand Lluka and Michael Watts",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fac-14/michael-armand/issues"
+  },
+  "homepage": "https://github.com/fac-14/michael-armand#readme"
+}
