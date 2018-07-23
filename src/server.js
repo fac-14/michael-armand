@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const querystring = require("querystring");
 
 const handler = (request, response) => {
   const endpoint = request.url;
@@ -15,7 +16,7 @@ const handler = (request, response) => {
       "Content-Type": "text/html"
     });
 
-    fs.readFile(path.join(__dirname, "..", "/public/index.html"), function (
+    fs.readFile(path.join(__dirname, "..", "/public/index.html"), function(
       error,
       file
     ) {
@@ -29,19 +30,32 @@ const handler = (request, response) => {
         response.end(file);
       }
     });
+  } else if (endpoint === "/create-post") {
+    var theData = "";
+    request.on("data", function(chunkOfData) {
+      theData += chunkOfData;
+    });
+    request.on("end", () => {
+      let convertedData = querystring.parse(theData);
+      console.log(convertedData);
+      response.writeHead(301, { Location: "/index.html" });
+      response.end();
+    });
   } else {
-    let extension = endpoint.split('.')[1]
+    let extension = endpoint.split(".")[1];
     let extensionType = {
-      "html": "text/html",
-      "css": "text/css",
-      "js": "application/javascript",
-      "jpg": "image/jpeg"
-    }
+      html: "text/html",
+      css: "text/css",
+      js: "application/javascript",
+      jpg: "image/jpeg",
+      png: "image/png",
+      ico: "image/x-icon"
+    };
     response.writeHead(200, {
       "Content-Type": "text/html"
     });
 
-    fs.readFile(path.join(__dirname, "..", '/public/', endpoint), function (
+    fs.readFile(path.join(__dirname, "..", "/public/", endpoint), function(
       error,
       file
     ) {
@@ -56,14 +70,11 @@ const handler = (request, response) => {
       }
     });
   }
-
-  // response.write(message);
-  // response.end();
 };
 
 const server = http.createServer(handler);
 
-server.listen(3000, function () {
+server.listen(3000, function() {
   console.log(
     "Server is listening on port 3000. Ready to accept requests. You hum it, I'll play it."
   );
