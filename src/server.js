@@ -11,9 +11,11 @@ const handler = (request, response) => {
   var message = "This is great, node is the best, like, really.";
 
   if (endpoint === "/") {
-    response.writeHead(200, { "Content-Type": "text/html" });
+    response.writeHead(200, {
+      "Content-Type": "text/html"
+    });
 
-    fs.readFile(path.join(__dirname, "..", "/public/index.html"), function(
+    fs.readFile(path.join(__dirname, "..", "/public/index.html"), function (
       error,
       file
     ) {
@@ -27,6 +29,32 @@ const handler = (request, response) => {
         response.end(file);
       }
     });
+  } else {
+    let extension = endpoint.split('.')[1]
+    let extensionType = {
+      "html": "text/html",
+      "css": "text/css",
+      "js": "application/javascript",
+      "jpg": "image/jpeg"
+    }
+    response.writeHead(200, {
+      "Content-Type": "text/html"
+    });
+
+    fs.readFile(path.join(__dirname, "..", '/public/', endpoint), function (
+      error,
+      file
+    ) {
+      if (error) {
+        console.log(error);
+        return;
+      } else {
+        response.writeHead(200, {
+          "Content-Type": extensionType[extension]
+        });
+        response.end(file);
+      }
+    });
   }
 
   // response.write(message);
@@ -35,7 +63,7 @@ const handler = (request, response) => {
 
 const server = http.createServer(handler);
 
-server.listen(3000, function() {
+server.listen(3000, function () {
   console.log(
     "Server is listening on port 3000. Ready to accept requests. You hum it, I'll play it."
   );
